@@ -67,6 +67,7 @@ CenterDot[d_DifferentialOperator][x_] := d[x]
 SetAttributes[operator, {Flat, OneIdentity}]
 
 (* addition *)
+operator[a_]+operator[b_] ^:= operator[a+b]
 operator[a_]+c_ ^:= operator[a+c]
 	
 (* scalar multiplication *)
@@ -89,6 +90,7 @@ scalarQ = FreeQ[DifferentialOperator];
 differentialQ = Not @* scalarQ;
 
 (* function application *)
+operator[0][x_] := 0
 operator[a_][x_] := CenterDot[a][x]
 
 operator/:MakeBoxes[operator[a__], form_]:=If[Length@Hold[a]>1,
@@ -101,6 +103,7 @@ operator/:MakeBoxes[operator[a__], form_]:=If[Length@Hold[a]>1,
 a : {___, _operator, ___} ^:= operator[Block[{operator = Identity}, a]]
 
 operator[a_List] . b_ ^:= Inner[operator[#1][#2]&, a, b]
+operator[a_List] . operator[b_List] ^:= Inner[operator @ CenterDot[##]&, a, b]
 
 End[]
 
