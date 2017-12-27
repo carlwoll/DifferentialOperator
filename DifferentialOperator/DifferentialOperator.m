@@ -96,6 +96,12 @@ operator/:MakeBoxes[operator[a__], form_]:=If[Length@Hold[a]>1,
 	StyleBox[MakeBoxes[a, form], Bold]
 ]
 
+(* arrays *)
+
+a : {___, _operator, ___} ^:= operator[Block[{operator = Identity}, a]]
+
+operator[a_List] . b_ ^:= Inner[operator[#1][#2]&, a, b]
+
 End[]
 
 EndPackage[]
