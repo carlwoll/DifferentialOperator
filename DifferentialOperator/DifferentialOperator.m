@@ -103,7 +103,7 @@ operator/:MakeBoxes[operator[a__], form_]:=If[Length@Hold[a]>1,
 a : {___, _operator, ___} ^:= operator[Block[{operator = Identity}, a]]
 
 operator[a_List] . b_ ^:= Inner[operator[#1][#2]&, a, b]
-operator[a_List] . operator[b_List] ^:= Inner[operator @ CenterDot[##]&, a, b]
+(operator[a_List]|a_List) . operator[b_List] ^:= Inner[operator @ CenterDot[##]&, a, b]
 
 End[]
 
